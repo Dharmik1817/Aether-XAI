@@ -254,9 +254,9 @@ COASTAL_LOCATIONS = [
 
 with st.sidebar:
     st.markdown("### 🌩️ Aether-XAI")
-    st.caption("ISRO SIH1521 — Explainable Heavy-Rain Nowcasting (0–6 hr)")
+    st.caption("Explainable Heavy-Rain Nowcasting")
     st.divider()
-    location = st.selectbox("Monitoring location (SDMA jurisdiction)", COASTAL_LOCATIONS)
+    location = st.selectbox("Monitoring location", COASTAL_LOCATIONS)
     if location == "Custom / Other":
         location = st.text_input("Enter location name", value="the selected district")
 
@@ -268,11 +268,6 @@ with st.sidebar:
 
     run_button = st.button("▶ Run Nowcast Analysis", use_container_width=True, type="primary")
 
-    st.divider()
-    st.caption(
-        "Prototype note: This dashboard uses a PyTorch ResNet-50 feature extractor "
-        "and Grad-CAM visualizer to identify heavy convective storm cells."
-    )
 
 # ---------------------------------------------------------------------------
 # Header
@@ -281,10 +276,6 @@ now_ist = datetime.now(ZoneInfo("Asia/Kolkata")).strftime("%d %b %Y · %H:%M:%S 
 st.markdown(
     f"""
     <div class="aether-header">
-        <p class="eyebrow">STATION TIME {now_ist}</p>
-        <span class="aether-badge">SIH1521</span>
-        <span class="aether-badge">ISRO</span>
-        <span class="aether-badge">0–6 HR NOWCAST</span>
         <h2 style="margin:0.5rem 0 0.15rem 0;">Aether-XAI Command Center</h2>
         <p style="margin:0;color:var(--muted);">
             Physically-grounded, explainable heavy-rain nowcasting for meteorologists &amp; SDMA officials.
@@ -560,7 +551,6 @@ else:
     st.info("Upload a satellite frame in the sidebar and click **Run Nowcast Analysis** to begin.")
 
 st.markdown(
-    '<div class="footer-note">Aether-XAI prototype · SIH1521 · Not for operational use without '
-    "meteorologist sign-off · Physics-informed hybrid explainable AI.</div>",
+    '<div class="footer-note">Aether-XAI Command Center.</div>',
     unsafe_allow_html=True,
 )
