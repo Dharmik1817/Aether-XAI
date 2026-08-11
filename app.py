@@ -248,17 +248,33 @@ with st.sidebar:
     st.divider()
     
     st.subheader("🌍 Geospatial ROI Targeting")
+    
+    # Update ki hui list jisme custom option aur Vadodara dono hain
     LOCATION_DATA = {
-        "Surat - North Grid": {"lat": "21.25° N", "lon": "72.88° E", "grid": "21.25, 72.88"},
+        "Vadodara - PIET Campus": {"lat": "22.28° N", "lon": "73.36° E", "grid": "22.28, 73.36"},
         "Surat - Coastal/Hazira": {"lat": "21.11° N", "lon": "72.62° E", "grid": "21.11, 72.62"},
         "Mumbai - Offshore": {"lat": "18.92° N", "lon": "72.75° E", "grid": "18.92, 72.75"},
-        "Custom INSAT Frame ROI": {"lat": "20.59° N", "lon": "78.96° E", "grid": "20.59, 78.96"}
+        "Custom Exact Coordinates": {"lat": "Custom", "lon": "Custom", "grid": "Custom"}
     }
     
     selected_loc = st.selectbox("Select 4km Grid Quadrant", list(LOCATION_DATA.keys()))
-    coords = LOCATION_DATA[selected_loc]
-    location = selected_loc # Keeping variable name for alerts
     
+    # Naya logic custom coordinates enter karne ke liye
+    if selected_loc == "Custom Exact Coordinates":
+        st.caption("Enter exact GPS coordinates below:")
+        custom_lat = st.text_input("Latitude", "22.30° N")
+        custom_lon = st.text_input("Longitude", "73.18° E")
+        
+        # Dashboard par show karne ke liye format clean karna
+        clean_lat = custom_lat.replace('° N', '').replace('° S', '').strip()
+        clean_lon = custom_lon.replace('° E', '').replace('° W', '').strip()
+        
+        coords = {"lat": custom_lat, "lon": custom_lon, "grid": f"{clean_lat}, {clean_lon}"}
+        location = "CUSTOM TARGET ROI"
+    else:
+        coords = LOCATION_DATA[selected_loc]
+        location = selected_loc # Keeping variable name for alerts
+        
     st.caption("Sensor: INSAT-3DS TIR-1 (10.8 µm) | Res: 4km/px")
 
     uploaded_file = st.file_uploader(
