@@ -279,10 +279,19 @@ class GradCAM:
 
 def overlay_heatmap(pil_img: Image.Image, cam: np.ndarray, alpha=0.45):
     """Blends the Grad-CAM heatmap onto the original image for display in the UI."""
-    img_resized = np.array(pil_img.resize((IMG_SIZE, IMG_SIZE)).convert("RGB"))
-    heatmap = cv2.applyColorMap(np.uint8(255 * cam), cv2.COLORMAP_JET)
+    # 1. Get the original wide dimensions of the uploaded satellite frame
+    orig_w, orig_h = pil_img.size
+    img_orig = np.array(pil_img.convert("RGB"))
+    
+    # 2. Stretch the Grad-CAM heatmap to fit the entire map perfectly
+    cam_resized = cv2.resize(cam, (orig_w, orig_h))
+    
+    # 3. Apply the jet color map (Red = high threat, Blue = low threat)
+    heatmap = cv2.applyColorMap(np.uint8(255 * cam_resized), cv2.COLORMAP_JET)
     heatmap = cv2.cvtColor(heatmap, cv2.COLOR_BGR2RGB)
-    blended = cv2.addWeighted(img_resized, 1 - alpha, heatmap, alpha, 0)
+    
+    # 4. Blend the heatmap directly over the full-resolution original image
+    blended = cv2.addWeighted(img_orig, 1 - alpha, heatmap, alpha, 0)
     return Image.fromarray(blended)
 
 
